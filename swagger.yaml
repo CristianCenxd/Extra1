@@ -1,0 +1,155 @@
+openapi: 3.0.0
+info:
+  title: API de Clientes
+  description: API para gestionar clientes y sus datos.
+  version: 1.0.0
+servers:
+  - url: 'https://extra1-5.onrender.com/'
+paths:
+  /clientes:
+    get:
+      summary: Obtener clientes con paginación
+      description: Retorna una lista de clientes con paginación.
+      parameters:
+        - in: query
+          name: page
+          required: false
+          description: Número de página (comienza desde 1).
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          required: false
+          description: Número de clientes por página.
+          schema:
+            type: integer
+            default: 50
+      responses:
+        200:
+          description: Lista de clientes con paginación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    description: Página actual
+                  totalPages:
+                    type: integer
+                    description: Número total de páginas
+                  totalClients:
+                    type: integer
+                    description: Número total de clientes
+                  clients:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        Nombre:
+                          type: string
+                        ComidaFavorita:
+                          type: string
+                        DescuentoNavidad:
+                          type: integer
+        400:
+          description: Error en los parámetros de la consulta
+  /clientes/{id}:
+    get:
+      summary: Obtener un cliente por ID
+      description: Retorna los detalles de un cliente específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: El ID del cliente.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  Nombre:
+                    type: string
+                  ComidaFavorita:
+                    type: string
+                  DescuentoNavidad:
+                    type: integer
+        404:
+          description: Cliente no encontrado
+  /clientes/crear:
+    post:
+      summary: Crear un nuevo cliente
+      description: Agrega un nuevo cliente a la base de datos.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Nombre:
+                  type: string
+                ComidaFavorita:
+                  type: string
+                DescuentoNavidad:
+                  type: integer
+      responses:
+        201:
+          description: Cliente creado exitosamente
+        400:
+          description: Error de validación
+  /clientes/actualizar/{id}:
+    put:
+      summary: Actualizar un cliente
+      description: Actualiza los datos de un cliente existente.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: El ID del cliente.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Nombre:
+                  type: string
+                ComidaFavorita:
+                  type: string
+                DescuentoNavidad:
+                  type: integer
+      responses:
+        200:
+          description: Cliente actualizado
+        404:
+          description: Cliente no encontrado
+  /clientes/eliminar/{id}:
+    delete:
+      summary: Eliminar un cliente
+      description: Elimina un cliente específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: El ID del cliente a eliminar.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Cliente eliminado
+        404:
+          description: Cliente no encontrado
